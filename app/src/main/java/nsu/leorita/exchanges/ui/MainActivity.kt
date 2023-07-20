@@ -1,6 +1,5 @@
 package nsu.leorita.exchanges.ui
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -8,7 +7,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -25,7 +23,8 @@ class MainActivity : AppCompatActivity() {
     private val adapter = CurrencyAdapter { data ->
         onCurrencyClicked(data)
     }
-    private var disposable: Disposable? = null
+    private var disposableDb: Disposable? = null
+    private var disposableWeb: Disposable? = null
     private var db: AppDatabase? = null
 
     private var _binding: ActivityMainBinding? = null
@@ -52,7 +51,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        disposable?.dispose()
+        disposableWeb?.dispose()
+        disposableDb?.dispose()
     }
 
     private fun onCurrencyClicked(data: Currency) {
@@ -62,34 +62,37 @@ class MainActivity : AppCompatActivity() {
         startActivity(recycleItemIntent)
     }
 
-
-
-    @SuppressLint("CheckResult")
     private fun getRangesFromWeb() {
-        val currencies: ArrayList<Currency> = ArrayList()
-        disposable = rangeService.getRanges()
+        disposableWeb = rangeService.getRanges()
+            .map { it.ranges.values }
+            .map { currencyCollection ->
+                currencyCollection.map {
+                    CurrencyDbEntity(
+                        it.code,
+                        it.name,
+                        it.denomination,
+                        it.value
+                    )
+                }
+            }
+            .flatMapCompletable { dbEntities -> db?.getCurrenciesDao()?.insertAll(dbEntities) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ t ->
-                t.ranges.values.forEach { currency ->
-                    currencies.add(currency)
+            .subscribe(
+                {
+
+                },
+                {
+                    error -> Log.e("ranges", error.message + ": web service error")
                 }
-                val currenciesDao = db?.getCurrenciesDao()
-                val currencyDbEntities = ArrayList<CurrencyDbEntity>()
-                currencies.forEach {currency ->
-                    currencyDbEntities.add(CurrencyDbEntity(currency.code!!, currency.name!!, currency.denomination, currency.value))
-                }
-                val completable = currenciesDao?.insertAll(currencyDbEntities)
-                completable?.doOnComplete { Log.i("ranges", "added " + currencyDbEntities.size + " items") }
-                adapter.data = currencies
-            }, { t -> Log.e("ranges", t.message ?: "ranges service error") })
+            )
     }
 
     private fun getRangesFromDb() {
         val currenciesDao = db?.getCurrenciesDao()
         val currencies: ArrayList<Currency> = ArrayList()
         val currencyEntities: ArrayList<CurrencyDbEntity> = ArrayList()
-        disposable = currenciesDao?.getAll()
+        disposableDb = currenciesDao?.getAll()
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({t ->
