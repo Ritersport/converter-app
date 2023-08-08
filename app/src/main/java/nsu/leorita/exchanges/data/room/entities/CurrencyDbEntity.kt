@@ -15,7 +15,8 @@ data class CurrencyDbEntity (
     @PrimaryKey(autoGenerate = false) val code: String,
     val name: String,
     val denomination: Int,
-    val value: Float
+    val value: Float,
+    val previousValue: Float,
         ){
-        fun toCurrency(): Currency = Currency(code, name, denomination, value)
+        fun toCurrency(): Currency = Currency(code, name, denomination, value, previousValue)
 }

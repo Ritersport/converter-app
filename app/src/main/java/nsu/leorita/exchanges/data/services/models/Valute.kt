@@ -14,4 +14,7 @@ data class Valute(
 
     @SerializedName("Value")
     var value: Float,
+
+    @SerializedName("Previous")
+    var previousValue: Float,
 )

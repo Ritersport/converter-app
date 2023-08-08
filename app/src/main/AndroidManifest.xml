@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Exchanges"
+        android:name=".App"
         tools:targetApi="31">
         <activity
             android:name=".ui.MainActivity"
@@ -26,7 +27,7 @@
 
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />
+                android:value="" /> 
         </activity>
         <activity android:name=".ui.ConvertActivity"/>
     </application>

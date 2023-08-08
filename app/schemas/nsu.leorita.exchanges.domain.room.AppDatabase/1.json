@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ea3d5aeea0da860f8ffca52958ddc95a",
+    "identityHash": "ed805dcc22ce8924f7f79d98cd67d38e",
     "entities": [
       {
         "tableName": "currencies",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `name` TEXT NOT NULL, `denomination` INTEGER NOT NULL, `value` REAL NOT NULL, PRIMARY KEY(`code`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `name` TEXT NOT NULL, `denomination` INTEGER NOT NULL, `value` REAL NOT NULL, `previousValue` REAL NOT NULL, PRIMARY KEY(`code`))",
         "fields": [
           {
             "fieldPath": "code",
@@ -29,6 +29,12 @@
           {
             "fieldPath": "value",
             "columnName": "value",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "previousValue",
+            "columnName": "previousValue",
             "affinity": "REAL",
             "notNull": true
           }
@@ -56,7 +62,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ea3d5aeea0da860f8ffca52958ddc95a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ed805dcc22ce8924f7f79d98cd67d38e')"
     ]
   }
 }

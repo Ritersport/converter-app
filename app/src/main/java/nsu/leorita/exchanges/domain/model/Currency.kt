@@ -5,6 +5,7 @@ data class Currency(
     val name: String,
     val denomination: Int,
     val value: Float,
+    val previousValue: Float,
 ) {
     fun getRange() = value / denomination
 }

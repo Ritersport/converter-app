@@ -17,15 +17,26 @@ class ConvertActivity: AppCompatActivity(   ) {
         binding.convertButton.setOnClickListener {
             onConvertButtonClick()
         }
-        binding.currencyTextView.text = intent.getStringExtra("currencyName")
+        binding.clearButton.setOnClickListener {
+            onClearButtonClick()
+        }
+        binding.currencyName.text = intent.getStringExtra("currencyName")
     }
 
     private fun onConvertButtonClick() {
-        binding.convertedTextView.text = ""
-        if (!binding.valueEditText.text.isEmpty()) {
-            binding.convertedTextView.text = (binding.valueEditText.text.toString()
-                .toFloat() / intent.getFloatExtra("currencyValue", 0F)).toString()
+        binding.currency.setText("")
+        if (binding.rubles.text == null) {
+            binding.rubles.setText("")
         }
+        if (binding.rubles.text?.isNotEmpty() == true) {
+            binding.currency.setText((binding.rubles.text.toString()
+                .toFloat() / intent.getFloatExtra("currencyValue", 0F)).toString())
+        }
+    }
+
+    private fun onClearButtonClick() {
+        binding.rubles.setText("")
+        binding.currency.setText("")
     }
 
 }
