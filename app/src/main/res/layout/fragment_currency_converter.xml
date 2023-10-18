@@ -46,8 +46,8 @@
                 style="@style/MaterialAlertDialog.Material3.Title.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
                 android:text="Доллар пендосский"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,8 @@
                     android:id="@+id/currency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

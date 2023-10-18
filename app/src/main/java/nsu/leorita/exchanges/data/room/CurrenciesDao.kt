@@ -20,4 +20,5 @@ interface CurrenciesDao {
     @Insert
     fun insertAll(currencies: List<CurrencyDbEntity>): Completable
 
+
 }

@@ -7,6 +7,7 @@ import nsu.leorita.exchanges.App
 import nsu.leorita.exchanges.domain.room.AppDatabase
 import nsu.leorita.exchanges.domain.services.RangesService
 import nsu.leorita.exchanges.ui.currenciesList.CurrenciesListViewModel
+import nsu.leorita.exchanges.ui.currencyConverter.CurrencyConverterViewModel
 import java.lang.IllegalStateException
 
 class ViewModelFactory (
@@ -17,6 +18,9 @@ class ViewModelFactory (
         val viewModel = when (modelClass) {
             CurrenciesListViewModel::class.java -> {
                 app.db?.let { CurrenciesListViewModel(app.rangesService, it) }
+            }
+            CurrencyConverterViewModel::class.java -> {
+                app.db?.let { CurrencyConverterViewModel() }
             }
             else -> {
                 throw IllegalStateException("Unknown view model class")
